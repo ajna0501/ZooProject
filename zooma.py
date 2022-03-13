@@ -1,9 +1,8 @@
 from flask import Flask, jsonify
 from flask_restx import Api, reqparse, Resource
-from project.ZooProject.zoo_json_utils import ZooJsonEncoder
-from project.ZooProject.zoo import Zoo
-
-from project.ZooProject.animal import Animal
+from zoo_json_utils import ZooJsonEncoder
+from zoo import Zoo
+from animal import Animal
 my_zoo = Zoo()
 
 zooma_app = Flask(__name__)

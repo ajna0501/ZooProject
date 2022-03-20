@@ -8,10 +8,23 @@ class Animal:
         self.age = age 
         self.feeding_record = [] 
         self.enclosure = None 
-        self.care_taker = None 
+        self.care_taker = None
+        self.medical_checkup = []
+
         # add more as required here 
         
     # simply store the current system time when this method is called    
     def feed(self): 
-        self.feeding_record.append ( datetime.datetime.now()) 
+        self.feeding_record.append ( datetime.datetime.now())
+    def vet(self):
+        self.medical_checkup.append(datetime.datetime.now())
+
+    def AnimalHome(self, enclosure):
+        self.enclosure = enclosure
+
+    def birth(self):
+        child = Animal(self.species_name, self.common_name, 0)
+        child.AnimalHome(self.enclosure)
+        return child
+
             

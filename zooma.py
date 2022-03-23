@@ -174,7 +174,7 @@ class Delete_Animals(Resource):
         targeted_enclosure = my_zoo.getEnclosure(enclosure_id)
         if not targeted_enclosure:
             return jsonify(f"Enclosure with ID {enclosure_id} was not found")
-        animals = targeted_enclosure.enclosure_animals
+        #animals = targeted_enclosure.enclosure_animals
         #Continue this realize how to tranfer to another enclosure and then delete this one
 
         #removing enclosure
@@ -194,7 +194,9 @@ class Employee(Resource):
         my_zoo.addEmployeer(care_taker)
         return jsonify(care_taker)
 
-
+@zooma_api.route('/employee/<employee_id>/care/<animal_id>/')
+class Care_Taker(Resource):
+    def post(self):
 
 
 if __name__ == '__main__':

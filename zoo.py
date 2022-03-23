@@ -2,6 +2,7 @@ class Zoo:
     def __init__ (self): 
         self.animals = []
         self.zoo_enclosure = []
+        self.zoo_employers = []
 
         
     def addAnimal(self, animal): 
@@ -22,5 +23,11 @@ class Zoo:
         for x in self.zoo_enclosure:
             if x.enclosure_id == enclosure_id:
                 return x
+
+    def removeEnclosure(self,enclosure_id):
+        self.zoo_enclosure.remove(enclosure_id)
+
+    def addEmployeer(self,emp):
+        self.zoo_employers.append(emp)
 
   

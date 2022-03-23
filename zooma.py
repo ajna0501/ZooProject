@@ -4,6 +4,7 @@ from zoo_json_utils import ZooJsonEncoder
 from zoo import Zoo
 from animal import Animal
 from enclosure import Enclosure
+from employee import Employee
 my_zoo = Zoo()
 
 zooma_app = Flask(__name__)
@@ -29,6 +30,9 @@ enclosure_zoo = reqparse.RequestParser()
 enclosure_zoo.add_argument('name', type=str, required=True, help='Name of enclosure')
 enclosure_zoo.add_argument('area', type=int, required=True, help='Area of enclosure')
 
+employee_parser = reqparse.RequestParser()
+employee_parser.add_argument('name', type=str, required=True, help='Name of Employee')
+employee_parser.add_argument('address', type=str, required=True, help='Employee address')
 
 @zooma_api.route('/animal')
 class AddAnimalAPI(Resource):
@@ -173,17 +177,25 @@ class Delete_Animals(Resource):
         animals = targeted_enclosure.enclosure_animals
         #Continue this realize how to tranfer to another enclosure and then delete this one
 
+        #removing enclosure
+        my_zoo.removeEnclosure(targeted_enclosure)
+        return jsonify(f"Enclosure with ID {enclosure_id} was removed")
+
+
+@zooma_api.route('/employee/')
+class Employee(Resource):
+    @zooma_api.doc(parser=employee_parser)
+    def post(self):
+        args = employee_parser.parse_args()
+        employee_name = args['name']
+        employee_address = args['address']
+
+        care_taker = Employee(employee_name, employee_address)
+        my_zoo.addEmployeer(care_taker)
+        return jsonify(care_taker)
 
 
 
 
-
-
-
-
-
-
-
-    
 if __name__ == '__main__':
     zooma_app.run(debug = False, port = 7890)

@@ -19,7 +19,7 @@ class Zoo:
         self.zoo_enclosure.append(enclosure)
 
     def getEnclosure(self, enclosure_id):
-        for x in self.enclosure:
+        for x in self.zoo_enclosure:
             if x.enclosure_id == enclosure_id:
                 return x
 

@@ -29,6 +29,7 @@ enclosure_zoo = reqparse.RequestParser()
 enclosure_zoo.add_argument('name', type=str, required=True, help='Name of enclosure')
 enclosure_zoo.add_argument('area', type=int, required=True, help='Area of enclosure')
 
+
 @zooma_api.route('/animal')
 class AddAnimalAPI(Resource):
     @zooma_api.doc(parser=animal_parser)
@@ -93,6 +94,8 @@ class Home(Resource):
         enclosure = args["enclosure_id"] #gets the id of enclosure
         home = my_zoo.getEnclosure(enclosure) # exsiting enlcosre in zooo
         targeted_animal.AnimalHome(enclosure) #add encllsure ID to animal
+        #also add animal to enclosure class
+        home.addAnimal(targeted_animal)
         if not home:
             return jsonify(f"Enclosurw with ID {enclosure} was not found")
         return jsonify(targeted_animal)
@@ -135,6 +138,47 @@ class Enclosure_in_zoo(Resource):
         add_enclosure = Enclosure(enclosure_name,enclosure_area)
         my_zoo.addEnclosure(add_enclosure)
         return jsonify(add_enclosure)
+
+@zooma_api.route('/enclosures')
+class Get_Enclosures(Resource):
+    def get(self):
+        all_enclosures = my_zoo.zoo_enclosure
+        return jsonify(all_enclosures)
+
+@zooma_api.route('/enclosures/<enclosure_id>/clean')
+class Clean_Enclosure(Resource):
+    def post(self, enclosure_id):
+        targeted_enclosure = my_zoo.getEnclosure(enclosure_id)
+        if not targeted_enclosure:
+            return jsonify(f"Enclosure with ID {enclosure_id} was not found")
+
+        targeted_enclosure.clean()
+        return jsonify(targeted_enclosure)
+
+@zooma_api.route('/enclosures/<enclosure_id>/animals')
+class Get_animals(Resource):
+    def get(self,enclosure_id):
+        targeted_enclosure = my_zoo.getEnclosure(enclosure_id)
+        if not targeted_enclosure:
+            return jsonify(f"Enclosure with ID {enclosure_id} was not found")
+
+        return jsonify(targeted_enclosure.enclosure_animals)
+
+@zooma_api.route('/enclosure/<enclosure_id> ')
+class Delete_Animals(Resource):
+    def delete(self,enclosure_id):
+        targeted_enclosure = my_zoo.getEnclosure(enclosure_id)
+        if not targeted_enclosure:
+            return jsonify(f"Enclosure with ID {enclosure_id} was not found")
+        animals = targeted_enclosure.enclosure_animals
+        
+
+
+
+
+
+
+
 
 
 

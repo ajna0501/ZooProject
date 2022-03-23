@@ -171,7 +171,8 @@ class Delete_Animals(Resource):
         if not targeted_enclosure:
             return jsonify(f"Enclosure with ID {enclosure_id} was not found")
         animals = targeted_enclosure.enclosure_animals
-        
+        #Continue this realize how to tranfer to another enclosure and then delete this one
+
 
 
 

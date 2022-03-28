@@ -30,6 +30,7 @@ class Zoo:
             if e.enclosure_id == enclosure_id:
                 return e
 
+
     def removeEnclosure(self,enclosure):
         self.zoo_enclosure.remove(enclosure)
 

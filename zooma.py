@@ -57,7 +57,7 @@ class Animal_ID(Resource):
         return search_result # this is automatically jsonified by flask-restx
     
      def delete(self, animal_id):
-        targeted_animal  = my_zoo.getAnimal(animal_id)
+        targeted_animal = my_zoo.getAnimal(animal_id)
         if not targeted_animal: 
             return jsonify(f"Animal with ID {animal_id} was not found")
         my_zoo.removeAnimal(targeted_animal)
@@ -102,7 +102,7 @@ class Home(Resource):
         home.addAnimal(targeted_animal)
         if not home:
             return jsonify(f"Enclosurw with ID {enclosure} was not found")
-        return jsonify(targeted_animal)
+        return jsonify(f" Animal with ID {animal_id} has been assigned to enclosure with ID {enclosure}")
 
 
 @zooma_api.route('/animal/birth/ ')
@@ -149,6 +149,8 @@ class Get_Enclosures(Resource):
         all_enclosures = my_zoo.zoo_enclosure
         return jsonify(all_enclosures)
 
+
+
 @zooma_api.route('/enclosures/<enclosure_id>/clean')
 class Clean_Enclosure(Resource):
     def post(self, enclosure_id):
@@ -168,9 +170,9 @@ class Get_animals(Resource):
 
         return jsonify(targeted_enclosure.enclosure_animals)
 
-@zooma_api.route('/enclosure/<enclosure_id> ')
-class Delete_Animals(Resource):
-    def delete(self,enclosure_id):
+@zooma_api.route('/enclosure/<enclosure_id>')
+class Delete_Enclosure(Resource):
+   def delete(self,enclosure_id):
         targeted_enclosure = my_zoo.getEnclosure(enclosure_id)
         if not targeted_enclosure:
             return jsonify(f"Enclosure with ID {enclosure_id} was not found")
@@ -178,12 +180,12 @@ class Delete_Animals(Resource):
         #Continue this realize how to tranfer to another enclosure and then delete this one
 
         #removing enclosure
-        my_zoo.removeEnclosure(targeted_enclosure)
+        my_zoo.removeEnclosure(enclosure_id)
         return jsonify(f"Enclosure with ID {enclosure_id} was removed")
 
 
 @zooma_api.route('/employee/')
-class Employee(Resource):
+class Make_Employee(Resource):
     @zooma_api.doc(parser=employee_parser)
     def post(self):
         args = employee_parser.parse_args()
@@ -196,7 +198,65 @@ class Employee(Resource):
 
 @zooma_api.route('/employee/<employee_id>/care/<animal_id>/')
 class Care_Taker(Resource):
-    def post(self):
+    def post(self,employee_id, animal_id):
+        animal_assigning = my_zoo.getAnimal(animal_id)
+        employee_for_animal = my_zoo.getEmployee(employee_id)
+
+        if not animal_assigning:
+            return jsonify(f"Animal with ID {animal_id} was not found")
+        if not employee_for_animal:
+            return jsonify(f"Employee with ID {employee_id} was not found")
+
+        employee_for_animal.assignAnimal(animal_assigning)
+        animal_assigning.assignCaretaker(employee_id)
+
+        return jsonify (f"Employee with ID {employee_id} has been assign to take care of animal with ID {animal_id}")
+
+
+@zooma_api.route('/employee/<employee_id>/care/animals')
+class Get_animal(Resource):
+    def get(self, employee_id):
+        employee_for_animal = my_zoo.getEmployee(employee_id)
+        if not employee_for_animal:
+            return jsonify(f"Employee with ID {employee_id} was not found")
+
+        return jsonify(employee_for_animal.Taking_care_of_animals)
+
+
+@zooma_api.route('/employees/stats')
+class Employee_stats(Resource):
+    def get(self):
+        return jsonify(my_zoo.employee_stats())
+
+
+
+@zooma_api.route('/employee/<employee_id>')
+class Delete_emplyoee (Resource):
+    def delete(self,employee_id):
+        employee_for_animal = my_zoo.getEmployee(employee_id)
+        if not employee_for_animal:
+            return jsonify(f"Employee with ID {employee_id} was not found")
+        my_zoo.removeEmployee(employee_for_animal)
+        return jsonify(f"Employee with ID{employee_id} has been deleted")
+
+
+@zooma_api.route('/tasks/cleaning/')
+class Cleaning_task (Resource):
+    def get(self):
+        return jsonify(my_zoo.cleaningPlan())
+
+@zooma_api.route('/tasks/medical')
+class Medical_task(Resource):
+    def get(self):
+        return jsonify(my_zoo.medicalCheckUp())
+
+@zooma_api.route('/tasks/feeding')
+class Feeding(Resource):
+    def get(self):
+        return jsonify(feedingPlan())
+
+
+
 
 
 if __name__ == '__main__':

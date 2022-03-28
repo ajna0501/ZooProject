@@ -16,5 +16,6 @@ def zooWithOneAnimal(baseURL):
 def test_zoo(zooWithOneAnimal):
     jo = json.loads(zooWithOneAnimal)
 
+
     assert (len(jo)==1)
     assert jo[0]["name"]=="TI"

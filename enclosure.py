@@ -10,7 +10,8 @@ class Enclosure:
 
     def clean(self):
         date = datetime.datetime.now()
-        self.clean_date.append(date)
+        dt_string = date.strftime("%d/%m/%Y %H:%M:%S")
+        self.clean_date.append(dt_string)
 
     def addAnimal(self,animal_id):
         self.enclosure_animals.append(animal_id)

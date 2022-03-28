@@ -14,10 +14,16 @@ class Animal:
         # add more as required here 
         
     # simply store the current system time when this method is called    
-    def feed(self): 
-        self.feeding_record.append ( datetime.datetime.now())
+    def feed(self):
+        date = datetime.datetime.now()
+        dt_string = date.strftime("%d/%m/%Y %H:%M:%S")
+        self.feeding_record.append(dt_string)
+
     def vet(self):
-        self.medical_checkup.append(datetime.datetime.now())
+        date = datetime.datetime.now()
+        dt_string = date.strftime("%d/%m/%Y %H:%M:%S")
+        self.medical_checkup.append(dt_string)
+        
 
     def AnimalHome(self, enclosure):
         self.enclosure = enclosure
@@ -26,5 +32,6 @@ class Animal:
         child = Animal(self.species_name, self.common_name, 0)
         child.AnimalHome(self.enclosure)
         return child
-
+    def assignCaretaker(self,employee_id):
+        self.care_taker = employee_id
             

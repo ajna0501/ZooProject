@@ -21,9 +21,9 @@ class Animal:
 
     def vet(self):
         date = datetime.datetime.now()
-        dt_string = date.strftime("%d/%m/%Y %H:%M:%S")
+        dt_string = date.strftime("%d/%m/%Y ")
         self.medical_checkup.append(dt_string)
-        
+
 
     def AnimalHome(self, enclosure):
         self.enclosure = enclosure

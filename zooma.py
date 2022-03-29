@@ -142,9 +142,6 @@ class AnimalStatas(Resource):
         stats["Available space per animal in each enclosure "] = my_zoo.availableSpace()
         return jsonify(stats)
 
-
-
-
 @zooma_api.route('/enclosure')
 class Enclosure_in_zoo(Resource):
     @zooma_api.doc(parser=enclosure_zoo)
@@ -194,7 +191,7 @@ class Delete_Enclosure(Resource):
 
         #removing enclosure
 
-        my_zoo.removeEnclosure(enclosure_id)
+        my_zoo.removeEnclosure(targeted_enclosure)
         return jsonify(f"Enclosure with ID {enclosure_id} was removed")
 
 

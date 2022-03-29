@@ -1,4 +1,5 @@
 import datetime
+import random
 
 
 class Zoo:
@@ -29,6 +30,13 @@ class Zoo:
         for e in self.zoo_enclosure:
             if e.enclosure_id == enclosure_id:
                 return e
+    def moveEnclosureAnimals(self,enclosure_id):
+        for animals in enclosure_id:
+            move_animals = animal.enclosure_animals
+            new_enclosure = random.enclosure_id
+            new_enlcosure.append(move_animals)
+
+
 
 
     def removeEnclosure(self,enclosure):
@@ -63,7 +71,7 @@ class Zoo:
             next_plan = f"{next_plan.year} / {next_plan.month}/ {next_plan.date}"
             self.cleaning_plan[enclosure.enclosure_id] = next_plan
 
-        return self.cleaning_plan
+
 
     def medicalCheckUp(self):
         for medical in self.animals:
@@ -72,8 +80,6 @@ class Zoo:
             next_checkup = f"{next_checkup.year} / {next.plan.month} / {next_checkup.date}"
             self.medical_plan[medical.animal_id] = next_checkup
 
-        return self.medical_plan
-
     def feedingPlan(self):
         for feeding in self.animals:
             last_feeding = feeding.feeding_record [-1]
@@ -81,9 +87,33 @@ class Zoo:
             next_feeding = f" {next_feeding.year} / {next_feeding.month} / {next_feeding.date}"
             self.feeding[feeding.animal_id] = next_feeding
 
-        return self.feeding
 
 
+    def animalsPerSpeciesStats(self):
+        dict = {}
+        for animal in self.animals:
+            if animal.species_name in dict.keys():
+                dict[animal.species_name] += 1
+            else:
+                dict[animal.species_name] = 1
+
+        return dict
+
+    def animalsPerEnclosureStats(self):
+        return len(self.zoo_enclosure) / len(self.animals)
+
+    def numEnclosureMultipleSpecies(self):
+        count = 0
+        for enclosure in self.zoo_enclosure:
+            if not enclosure:
+                count +=1
+        return count
+
+    def availableSpace(self):
+        dict = {}
+        for enclosure in self.zoo_enclosure:
+            dict[enclosure.enclosure_id] = len(enclosure.enclosure_animals) / enclosure.enclosure_area
+        return dict
 
 
 

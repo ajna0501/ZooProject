@@ -132,6 +132,19 @@ class Death(Resource):
 
         return jsonify(f"This animal {animal_id} died and was removed from system")
 
+@zooma_api.route('/animals/stat')
+class AnimalStatas(Resource):
+    def get(self):
+        stats ={}
+        stats["Total number of animals per species"] = my_zoo.animalsPerSpeciesStats()
+        stats["Average number of animals per enclosure"] = my_zoo.animalsPerEnclosureStats()
+        stats["Number of enclosures with animals from multiple species"] =my_zoo.numEnclosureMultipleSpecies()
+        stats["Available space per animal in each enclosure "] = my_zoo.availableSpace()
+        return jsonify(stats)
+
+
+
+
 @zooma_api.route('/enclosure')
 class Enclosure_in_zoo(Resource):
     @zooma_api.doc(parser=enclosure_zoo)
@@ -180,6 +193,7 @@ class Delete_Enclosure(Resource):
         #Continue this realize how to tranfer to another enclosure and then delete this one
 
         #removing enclosure
+
         my_zoo.removeEnclosure(enclosure_id)
         return jsonify(f"Enclosure with ID {enclosure_id} was removed")
 
@@ -243,17 +257,22 @@ class Delete_emplyoee (Resource):
 @zooma_api.route('/tasks/cleaning/')
 class Cleaning_task (Resource):
     def get(self):
-        return jsonify(my_zoo.cleaningPlan())
+        my_zoo.cleaningPlan()
+        return jsonify(my_zoo.cleaning_plan)
 
 @zooma_api.route('/tasks/medical')
 class Medical_task(Resource):
     def get(self):
-        return jsonify(my_zoo.medicalCheckUp())
+        my_zoo.medicalCheckUp()
+        return jsonify(my_zoo.medical_plan)
 
 @zooma_api.route('/tasks/feeding')
 class Feeding(Resource):
     def get(self):
-        return jsonify(feedingPlan())
+        my_zoo.feedingPlan()
+        return jsonify(my_zoo.feeding)
+
+
 
 
 

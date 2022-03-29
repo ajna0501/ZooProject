@@ -40,9 +40,9 @@ class Zoo:
     def removeEnclosure(self,enclosure):
         animals = enclosure.enclosure_animals
         self.zoo_enclosure.remove(enclosure)
-        new_home = random.choice.zoo_enclosure
+        new_home = random.choice(self.zoo_enclosure)
 
-        self.moveAnimaltoNewEnclosure(animals,new_home)
+        self.moveAnimaltoNewEnclosure(animals, new_home)
 
 
 
@@ -76,7 +76,7 @@ class Zoo:
     def removeEmployee(self,employee):
         animals = employee.Taking_care_of_animals
         self.zoo_employers.remove(employee)
-        new_caretaker = random.choice.zoo_employers
+        new_caretaker = random.choice(self.zoo_employers)
 
         self.moveAnimal(animals,new_caretaker)
 
@@ -84,26 +84,35 @@ class Zoo:
 
     def cleaningPlan(self):
         for enclosure in self.zoo_enclosure:
-            last_cleaned = enclosure.clean_date[-1]
-            next_plan = last_cleaned+datetime.timedelta(days=3)
-            next_plan = f"{next_plan.day} / {next_plan.month}/ {next_plan.year} "
-            self.cleaning_plan[enclosure.enclosure_id] = next_plan
+            if len(enclosure.clean_date) == 0:
+                self.cleaning_plan[enclosure.enclosure_id] = "No cleaning recorded, clean it now"
+            else:
+                last_cleaned = enclosure.clean_date[-1]
+                next_plan = last_cleaned+datetime.timedelta(days=3)
+                next_plan = f"{next_plan.day} / {next_plan.month}/ {next_plan.year} "
+                self.cleaning_plan[enclosure.enclosure_id] = next_plan
 
 
 
     def medicalCheckUp(self):
         for medical in self.animals:
-            last_checkup = medical.medical_checkup[-1]
-            next_checkup = last_checkup + datetime.timedelta(days = 35)
-            next_checkup = f"{next_checkup.day}/{next_checkup.month} /{next_checkup.year}   "
-            self.medical_plan[medical.animal_id] = next_checkup
+            if len(medical.medical_checkup) == 0 :
+                self.medical_plan[medical.animal_id] = "No medical Check-up recorded, to the chekup now"
+            else:
+                last_checkup = medical.medical_checkup[-1]
+                next_checkup = last_checkup + datetime.timedelta(days = 35)
+                next_checkup = f"{next_checkup.day}/{next_checkup.month} /{next_checkup.year}   "
+                self.medical_plan[medical.animal_id] = next_checkup
 
     def feedingPlan(self):
         for feeding in self.animals:
-            last_feeding = feeding.feeding_record[-1]
-            next_feeding = last_feeding + datetime.timedelta(days = 2)
-            next_feeding = f" {next_feeding.day}/ {next_feeding.month} /{next_feeding.year}  "
-            self.feeding[feeding.animal_id] = next_feeding
+            if len(feeding.feeding_record ) == 0:
+                self.feeding[feeding.animal_id] = "No feeding recorded, feed animal now"
+            else:
+                last_feeding = feeding.feeding_record[-1]
+                next_feeding = last_feeding + datetime.timedelta(days = 2)
+                next_feeding = f" {next_feeding.day}/ {next_feeding.month} /{next_feeding.year}  "
+                self.feeding[feeding.animal_id] = next_feeding
 
 
 

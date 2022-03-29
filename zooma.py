@@ -271,9 +271,5 @@ class Feeding(Resource):
 
 
 
-
-
-
-
 if __name__ == '__main__':
     zooma_app.run(debug = False, port = 7890)

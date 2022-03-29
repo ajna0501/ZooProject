@@ -6,7 +6,7 @@ import pytest
 
 @pytest.fixture
 def tiger1():
-    return Animal("tiger", "TI", 12)
+    return Animal("tiger", "TIxi", 12)
 @pytest.fixture
 def tiger2():
     return Animal("tiger", "IT", 32)

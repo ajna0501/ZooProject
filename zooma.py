@@ -54,7 +54,7 @@ class AddAnimalAPI(Resource):
 class Animal_ID(Resource):
      def get(self, animal_id):
         search_result  = my_zoo.getAnimal(animal_id)
-        return search_result # this is automatically jsonified by flask-restx
+        return jsonify(search_result) # this is automatically jsonified by flask-restx
     
      def delete(self, animal_id):
         targeted_animal = my_zoo.getAnimal(animal_id)

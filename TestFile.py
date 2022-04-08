@@ -129,6 +129,24 @@ def test_removeEnclosure(zoo1, tiger1,lion1,enclosure2,enclosure1,caretake1):
     zoo1.removeEnclosure(enclosure2)
     assert(len(zoo1.zoo_enclosure)==1)
     assert(len(enclosure1.enclosure_animals)==2)
+    assert(enclosure1.enclosure_animals[:2]==tiger1,lion1)
 
+def test_removeCaretaker(zoo1,tiger1,tiger2,caretake1,caretake2):
+    zoo1.addAnimal(tiger1)
+    zoo1.addAnimal(tiger2)
+    zoo1.addAnimal(lion1)
+    zoo1.addEmployeer(caretake1)
+    zoo1.addEmployeer(caretake2)
+    caretake1.assignAnimal(tiger2)
+    caretake1.assignAnimal(tiger1)
+    caretake2.assignAnimal(lion1)
 
+    tiger2.assignCaretaker(caretake1)
+    tiger1.assignCaretaker(caretake1)
+
+    zoo1.removeEmployee(caretake1)
+
+    assert(len(zoo1.zoo_employers)==1)
+    assert(len(caretake2.Taking_care_of_animals)==3)
+    assert(caretake2.Taking_care_of_animals[:3] == tiger1,tiger2,lion1)
 

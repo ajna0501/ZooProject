@@ -12,11 +12,13 @@ zooma_app = Flask(__name__)
 zooma_app.json_encoder = ZooJsonEncoder 
 zooma_api = Api(zooma_app)
 
+#parser use input by user
 animal_parser = reqparse.RequestParser()
 animal_parser.add_argument('species', type=str, required=True, help='The scientific name of the animal, e,g. Panthera tigris')
 animal_parser.add_argument('name', type=str, required=True, help='The common name of the animal, e.g., Tiger')
 animal_parser.add_argument('age', type=int, required=True, help='The age of the animal, e.g., 12')
 
+#for adding enclosure id
 animal_enclosure = reqparse.RequestParser()
 animal_enclosure.add_argument ('enclosure_id', type=str, required=True, help='The id of animals enclosure')
 
@@ -26,10 +28,12 @@ animal_mother.add_argument('mother_id', type=str, required=True, help='Input ani
 animal_death = reqparse.RequestParser()
 animal_death.add_argument('animal_id', type=str, required=True, help='Input animals ID that died')
 
+#adding enclosure
 enclosure_zoo = reqparse.RequestParser()
 enclosure_zoo.add_argument('name', type=str, required=True, help='Name of enclosure')
 enclosure_zoo.add_argument('area', type=int, required=True, help='Area of enclosure')
 
+#adding employeers
 employee_parser = reqparse.RequestParser()
 employee_parser.add_argument('name', type=str, required=True, help='Name of Employee')
 employee_parser.add_argument('address', type=str, required=True, help='Employee address')
@@ -84,6 +88,7 @@ class AnimalVet(Resource):
         targeted_animal = my_zoo.getAnimal(animal_id)
         if not targeted_animal:
             return jsonify(f"Animal with ID {animal_id} was not found")
+        #does medical checkup for animal//adds date of medical chekcup
         targeted_animal.vet()
         return jsonify(targeted_animal)
 
@@ -111,11 +116,12 @@ class Birth(Resource):
     def post(self):
         args = animal_mother.parse_args() # to get mother parameter
         motherId = args["mother_id"] #get mother id
-        mother = my_zoo.getAnimal(motherId) #gets you the animal
+        mother = my_zoo.getAnimal(motherId) #gets the animal
         if not mother:
             return jsonify( f"This id animal {motherId} is not a mother")
+        #new animal in the zoo
         newborn = mother.birth()
-        my_zoo.addAnimal(newborn)
+        my_zoo.addAnimal(newborn)#append it to the animal list in the zoo
         return jsonify(newborn)
 
 
@@ -128,7 +134,8 @@ class Death(Resource):
         death = my_zoo.getAnimal(animal_id) #gets you the animal
         if not death:
             return jsonify( f"This id animal {animal_id} was not found")
-        my_zoo.removeAnimal(death)
+
+        my_zoo.removeAnimal(death) # removes animal from animal zoo list
 
         return jsonify(f"This animal {animal_id} died and was removed from system")
 
@@ -149,7 +156,7 @@ class Enclosure_in_zoo(Resource):
         args = enclosure_zoo.parse_args()# get the agument
         enclosure_name = args ["name"]
         enclosure_area = args ["area"]
-        add_enclosure = Enclosure(enclosure_name,enclosure_area)
+        add_enclosure = Enclosure(enclosure_name,enclosure_area) # adds object of enclosure
         my_zoo.addEnclosure(add_enclosure)
         return jsonify(add_enclosure)
 
@@ -158,6 +165,7 @@ class Get_Enclosures(Resource):
     def get(self):
         all_enclosures = my_zoo.zoo_enclosure
         return jsonify(all_enclosures)
+    #get existing enclosures
 
 
 
@@ -165,9 +173,10 @@ class Get_Enclosures(Resource):
 class Clean_Enclosure(Resource):
     def post(self, enclosure_id):
         targeted_enclosure = my_zoo.getEnclosure(enclosure_id)
+        #if doens't exists
         if not targeted_enclosure:
             return jsonify(f"Enclosure with ID {enclosure_id} was not found")
-
+        #adds date to enclosure clenaing date list
         targeted_enclosure.clean()
         return jsonify(targeted_enclosure)
 
@@ -178,7 +187,7 @@ class Get_animals(Resource):
         if not targeted_enclosure:
             return jsonify(f"Enclosure with ID {enclosure_id} was not found")
 
-        return jsonify(targeted_enclosure.enclosure_animals)
+        return jsonify(targeted_enclosure.enclosure_animals) # shows all animals as objects presented in encloure
 
 @zooma_api.route('/enclosure/<enclosure_id>')
 class Delete_Enclosure(Resource):
@@ -186,11 +195,7 @@ class Delete_Enclosure(Resource):
         targeted_enclosure = my_zoo.getEnclosure(enclosure_id)
         if not targeted_enclosure:
             return jsonify(f"Enclosure with ID {enclosure_id} was not found")
-        #animals = targeted_enclosure.enclosure_animals
-        #Continue this realize how to tranfer to another enclosure and then delete this one
-
-        #removing enclosure
-
+        #removes enclosure and moves animals to toher enclosure
         my_zoo.removeEnclosure(targeted_enclosure)
         return jsonify(f"Enclosure with ID {enclosure_id} was removed")
 
@@ -200,22 +205,22 @@ class Make_Employee(Resource):
     @zooma_api.doc(parser=employee_parser)
     def post(self):
         args = employee_parser.parse_args()
-        employee_name = args['name']
-        employee_address = args['address']
+        employee_name = args['name'] # gets the name
+        employee_address = args['address'] # gets the addres
 
-        care_taker = Employee(employee_name, employee_address)
-        my_zoo.addEmployeer(care_taker)
+        care_taker = Employee(employee_name, employee_address) # creates employees objects
+        my_zoo.addEmployeer(care_taker) #adds emolyees to emplyees list in zoo
         return jsonify(care_taker)
 
 @zooma_api.route('/employee/<employee_id>/care/<animal_id>/')
 class Care_Taker(Resource):
     def post(self,employee_id, animal_id):
-        animal_assigning = my_zoo.getAnimal(animal_id)
-        employee_for_animal = my_zoo.getEmployee(employee_id)
+        animal_assigning = my_zoo.getAnimal(animal_id) # gets the animaml
+        employee_for_animal = my_zoo.getEmployee(employee_id) # gets the caretaker
 
-        if not animal_assigning:
+        if not animal_assigning: # if animal not found
             return jsonify(f"Animal with ID {animal_id} was not found")
-        if not employee_for_animal:
+        if not employee_for_animal:# if employee not found
             return jsonify(f"Employee with ID {employee_id} was not found")
 
         employee_for_animal.assignAnimal(animal_assigning)
@@ -227,27 +232,28 @@ class Care_Taker(Resource):
 @zooma_api.route('/employee/<employee_id>/care/animals')
 class Get_animal(Resource):
     def get(self, employee_id):
-        employee_for_animal = my_zoo.getEmployee(employee_id)
+        employee_for_animal = my_zoo.getEmployee(employee_id)# gets employee with ide
         if not employee_for_animal:
             return jsonify(f"Employee with ID {employee_id} was not found")
 
+        #returns list of animals employee is taking care of
         return jsonify(employee_for_animal.Taking_care_of_animals)
 
 
 @zooma_api.route('/employees/stats')
 class Employee_stats(Resource):
     def get(self):
-        return jsonify(my_zoo.employee_stats())
+        return jsonify(my_zoo.employee_stats()) # returns dictonary of caluclations
 
 
 
 @zooma_api.route('/employee/<employee_id>')
 class Delete_emplyoee (Resource):
     def delete(self,employee_id):
-        employee_for_animal = my_zoo.getEmployee(employee_id)
+        employee_for_animal = my_zoo.getEmployee(employee_id) #finds obejct wiht id
         if not employee_for_animal:
             return jsonify(f"Employee with ID {employee_id} was not found")
-        my_zoo.removeEmployee(employee_for_animal)
+        my_zoo.removeEmployee(employee_for_animal) # removes object employee
         return jsonify(f"Employee with ID{employee_id} has been deleted")
 
 

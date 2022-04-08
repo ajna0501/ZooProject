@@ -24,12 +24,13 @@ class Animal:
 
 
     def AnimalHome(self, enclosure):
-        self.enclosure = enclosure
+        self.enclosure = enclosure # sets animals enclosure to targeted one
 
     def birth(self):
         child = Animal(self.species_name, self.common_name, 0)
         child.AnimalHome(self.enclosure)
         return child
+
     def assignCaretaker(self,employee_id):
         self.care_taker = employee_id
-            
+            # changes care taker from noen to employes object

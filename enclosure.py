@@ -9,12 +9,13 @@ class Enclosure:
         self.enclosure_animals = []
 
     def clean(self):
+        #appends time for cleaning the enclosure
         date = datetime.datetime.now()
 
         self.clean_date.append(date)
 
     def addAnimal(self,animal_id):
-        self.enclosure_animals.append(animal_id)
+        self.enclosure_animals.append(animal_id) # adds animal to enclosure_animal list
 
 
 

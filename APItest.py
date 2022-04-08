@@ -2,7 +2,7 @@ import pytest
 import requests
 import json
 
-@pytesty.fixture
+@pytest.fixture
 def baseURL():
     return "http://127.0.0.1:7890/"
 

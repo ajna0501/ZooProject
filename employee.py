@@ -7,4 +7,5 @@ class Employee:
         self.Taking_care_of_animals =[]
 
     def assignAnimal(self,animal_id):
-        self.Taking_care_of_animals.append(animal_id)
+        self.Taking_care_of_animals.append(animal_id) # assign animals to the list employee is taking care of
+

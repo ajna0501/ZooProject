@@ -109,5 +109,26 @@ def test_birthOfAnimal(tiger2,enclosure2, zoo1):
     zoo1.addAnimal(newborn)
 
     assert(len(zoo1.animals)==2)
-    assert(newborn.enclosure== enclosure2.enclosure_id
-           )
+    assert(newborn.enclosure== enclosure2.enclosure_id)
+
+def test_animalDeath(tiger2,zoo1):
+    zoo1.addAnimal(tiger2)
+    zoo1.removeAnimal(tiger2)
+
+    assert(len(zoo1.animals)==0)
+
+def test_removeEnclosure(zoo1, tiger1,lion1,enclosure2,enclosure1,caretake1):
+    zoo1.addAnimal(tiger1)
+    zoo1.addAnimal(lion1)
+    zoo1.addEnclosure(enclosure2)
+    enclosure2.addAnimal(tiger1)
+    enclosure2.addAnimal(lion1)
+    zoo1.addEnclosure(enclosure1)
+
+
+    zoo1.removeEnclosure(enclosure2)
+    assert(len(zoo1.zoo_enclosure)==1)
+    assert(len(enclosure1.enclosure_animals)==2)
+
+
+

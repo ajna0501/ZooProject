@@ -150,3 +150,18 @@ def test_removeCaretaker(zoo1,tiger1,tiger2,caretake1,caretake2):
     assert(len(caretake2.Taking_care_of_animals)==3)
     assert(caretake2.Taking_care_of_animals[:3] == tiger1,tiger2,lion1)
 
+def test_employeeStats(zoo1, caretake1,caretake2,tiger1,tiger2,lion1, enclosure2):
+    caretaker3 = Employee("Lilet","new street")
+    zoo1.addAnimal(tiger1)
+    zoo1.addAnimal(tiger2)
+    zoo1.addAnimal(lion1)
+    zoo1.addEmployeer(caretake2)
+    zoo1.addEmployeer(caretake1)
+    zoo1.addEmployeer(caretaker3)
+    caretaker3.assignAnimal(tiger1)
+    caretaker3.assignAnimal(tiger2)
+
+    caretake2.assignAnimal(tiger1)
+  
+
+    assert(zoo1.employee_stats()=={"Minimum": 0, "Maximum": 2, "Average": 1})
